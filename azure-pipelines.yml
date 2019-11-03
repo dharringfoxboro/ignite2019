@@ -26,6 +26,7 @@ steps:
     filename: '$(Build.SourcesDirectory)/src/PokerLeagueManager.UI.Web/BuildAngular.bat'
 
 - task: VSBuild@1
+  displayName: VS
   inputs:
     solution: '$(solution)'
     msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true"'
@@ -38,10 +39,17 @@ steps:
     configuration: '$(buildConfiguration)'
 
 - task: CopyFiles@2
+  displayName: copy junk
   inputs:
     SourceFolder: '$(Build.SourcesDirectory)'
-    Contents: '**'
+    Contents: |
+      **\*.Commands.WebApi.zip
+      **\*.Events.WebApi.zip
+      **\*.Queries.WebApi.zip
+      **\*.UI.Web.zip
+      **\*.dacpac
     TargetFolder: '$(Build.ArtifactStagingDirectory)'
+    flattenFolders: true
 
 - task: PublishBuildArtifacts@1
   inputs:
